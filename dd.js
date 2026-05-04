@@ -1,13 +1,12 @@
-/* FULL FIXED JS - keep your same HTML/CSS, replace only the old JS file with this */
 (function () {
   "use strict";
 
   const ROBUX_ICON = "https://images.rbxcdn.com/e854eb7b2951ac03edba9a2681032bba.ico";
 
-  /* AdBlueMedia locker config */
-  const LOCKER_SCRIPT_URL = "https://d19k1sh57v5k0g.cloudfront.net/e0d0b45.js";
-  const LOCKER_CONFIG_NAME = "aWeBz_Cba_FnMzIc";
-  const LOCKER_CONFIG_VALUE = { it: 4595313, key: "046fc" };
+  /* AdBlueMedia locker config — UPDATED */
+  const LOCKER_SCRIPT_URL = "https://d1g1lhd4vferpn.cloudfront.net/f2044c0.js";
+  const LOCKER_CONFIG_NAME = "lnENN_QCk_cZfJlc";
+  const LOCKER_CONFIG_VALUE = { it: 4602181, key: "8be07" };
 
   window[LOCKER_CONFIG_NAME] = LOCKER_CONFIG_VALUE;
   window.__adblueMediaLockerLoaded = false;
@@ -113,7 +112,6 @@
       .replace(/\s+/g, " ")
       .trim()
       .slice(0, 24);
-
     return cleaned || "Guest Session";
   }
 
@@ -668,11 +666,13 @@
         window.__adblueMediaAddedGlobals = Object.keys(window).filter(function (key) {
           return !beforeFunctions[key] && typeof window[key] === "function";
         });
+        console.log("[Locker] New globals after load:", window.__adblueMediaAddedGlobals);
       } catch (e) {}
     };
 
     s.onerror = function () {
       window.__adblueMediaLockerFailed = true;
+      console.error("[Locker] Script failed to load:", LOCKER_SCRIPT_URL);
     };
 
     document.head.appendChild(s);
@@ -680,6 +680,7 @@
 
   function getLockerFunctionName() {
     const candidates = [
+      "lnENN_QCk_cZfJlc_show",   // new locker — try first
       "aWeBz_Cba_FnMzIc_show",
       "showLocker",
       "show_locker",
@@ -753,20 +754,20 @@
 
       if (!ready || !fnName) {
         console.error(
-          "AdBlueMedia locker did not expose a trigger function. Check HTTPS, adblock, domain approval, and active campaign."
+          "[Locker] No trigger function found. Check: HTTPS, adblock disabled, domain approved in AdBlueMedia dashboard, campaign active."
         );
         alert(
-          "Locker could not open. Test on your real HTTPS domain, disable AdBlock, and make sure this domain is approved in AdBlueMedia."
+          "Locker could not open. Make sure this domain is approved in AdBlueMedia, AdBlock is off, and the site is on HTTPS."
         );
         return;
       }
 
       try {
-        console.log("Opening AdBlueMedia locker with:", fnName);
+        console.log("[Locker] Opening with function:", fnName);
         window[fnName]();
       } catch (err) {
-        console.error("Locker trigger failed:", fnName, err);
-        alert("Locker loaded but failed to open. Check browser console for the exact error.");
+        console.error("[Locker] Trigger failed:", fnName, err);
+        alert("Locker loaded but failed to open. Check the browser console for the exact error.");
       }
     });
   }
